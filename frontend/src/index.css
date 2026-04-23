@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gambler-bg: #0a0a0f;
+  --color-gambler-panel: #161622;
+  --color-neon-purple: #9d00ff;
+  --color-neon-red: #ff003c;
+  --color-neon-gold: #ffb700;
+  
+  --animate-spin-fast: spin 0.3s linear infinite;
+  --animate-marquee: marquee 25s linear infinite;
+  
+  @keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+}
+
+body {
+  background-color: var(--color-gambler-bg);
+  color: #e5e5e5;
+  margin: 0;
+  font-family: "Inter", "Roboto", sans-serif;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
