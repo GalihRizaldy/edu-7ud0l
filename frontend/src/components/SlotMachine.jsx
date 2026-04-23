@@ -107,9 +107,15 @@ function SlotMachine({ onSpinResult }) {
         
         if (data.isJackpot) {
           setShowJackpot(true);
+          // Getaran 3 detik untuk Jackpot
+          if ("vibrate" in navigator) navigator.vibrate(3000);
+          
           // Wait for the jackpot animation duration
           await new Promise(resolve => setTimeout(resolve, 3500));
           setShowJackpot(false);
+        } else if (data.win) {
+          // Getaran 1 detik untuk Menang Biasa
+          if ("vibrate" in navigator) navigator.vibrate(1000);
         }
 
         setIsSpinning(false);
