@@ -9,8 +9,9 @@ const poolConfig = {
 };
 
 async function initializeDB() {
+  let tempPool;
   try {
-    const tempPool = mysql.createPool(poolConfig);
+    tempPool = mysql.createPool(poolConfig);
     const dbName = process.env.DB_NAME || 'edujudol_db';
     
     // Create DB safely
@@ -34,16 +35,6 @@ async function initializeDB() {
     `;
     await tempPool.query(createUsersTableQuery);
 
-    // Migration for existing tables: add columns if they don't exist
-    try {
-      await tempPool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS current_seed VARCHAR(255) DEFAULT 'seed_default_123'`);
-      await tempPool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS behavior_mode ENUM('hook', 'normal', 'drain') DEFAULT 'normal'`);
-      await tempPool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS force_jackpot TINYINT(1) DEFAULT 0`);
-    } catch (migErr) {
-      // Ignore if columns already exist (MariaDB < 10.5 might not support ADD COLUMN IF NOT EXISTS)
-      console.log("Migration check (ALTER) skipped or already applied.");
-    }
-
     // Initial check for 'user' account because simulation relies on it
     const [rows] = await tempPool.query(`SELECT * FROM users WHERE username = 'user'`);
     if (rows.length === 0) {
@@ -63,10 +54,10 @@ async function initializeDB() {
     }
 
     console.log("Database initialized successfully!");
-    await tempPool.end(); // close temporary pool
-
   } catch (error) {
     console.error("Database initialization failed:", error);
+  } finally {
+    if (tempPool) await tempPool.end(); // close temporary pool
   }
 }
 

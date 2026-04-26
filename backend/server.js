@@ -35,6 +35,10 @@ app.get('/', (req, res) => {
   res.json({ status: 'EduJudol Backend Running', architecture: 'MVC' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;

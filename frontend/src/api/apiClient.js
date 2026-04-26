@@ -11,8 +11,10 @@ export const apiClient = async (endpoint, options = {}) => {
     },
   };
 
+  const BASE_URL = import.meta.env.VITE_API_URL || '';
+
   try {
-    const response = await fetch(`/api${endpoint}`, config);
+    const response = await fetch(`${BASE_URL}/api${endpoint}`, config);
     const data = await response.json();
     
     if (!response.ok) {
