@@ -65,6 +65,11 @@ async function initializeDB() {
 const db = mysql.createPool({
   ...poolConfig,
   database: process.env.DB_NAME || 'edujudol_db',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 10000
 });
 
 module.exports = { db, initializeDB };
