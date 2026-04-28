@@ -132,12 +132,16 @@ function SlotMachine({ onSpinResult }) {
       } catch (err) {
         console.error(err);
         setErrorMsg(err.message || "Gagal terhubung ke server");
+        // Ensure animations are stopped even on error
+        controls1.stop();
+        controls2.stop();
+        controls3.stop();
         setIsSpinning(false);
         break;
+      } finally {
+        setIsSpinning(false);
       }
     }
-    
-    setIsSpinning(false);
   };
 
   return (
